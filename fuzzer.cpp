@@ -175,6 +175,8 @@ void Fuzzer::Run(int argc, char **argv) {
 
   ParseOptions(argc, argv);
 
+  srand(time(NULL));
+
   SetupDirectories();
 
   if(should_restore_state) {
@@ -661,7 +663,7 @@ void Fuzzer::SynchronizeAndGetJob(ThreadContext* tc, FuzzerJob* job) {
       }
     }
   }
-  else {
+  else if (rand() % 100 <= 10) {
     sync_fuzzers(tc);
   }
   
