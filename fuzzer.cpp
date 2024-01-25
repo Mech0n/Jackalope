@@ -735,6 +735,8 @@ void Fuzzer::SynchronizeAndGetJob(ThreadContext* tc, FuzzerJob* job) {
     job->type = WAIT;
   }
 
+  printf("Current job->type: %d\n", job->type);
+
   queue_mutex.Unlock();
 }
 
@@ -771,6 +773,7 @@ void Fuzzer::FuzzJob(ThreadContext* tc, FuzzerJob* job) {
   entry->sample->EnsureLoaded();
 
   while (1) {
+    printf("Still Fuzzing sample %s\n", entry->sample_filename.c_str());
     Sample mutated_sample = *entry->sample;
     if (!tc->mutator->Mutate(&mutated_sample, tc->prng, tc->all_samples_local)) break;
     if (mutated_sample.size > Sample::max_size) {

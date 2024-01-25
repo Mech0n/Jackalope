@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Check if three arguments are provided
-if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 <ssh_server> <remote_directory> <local_directory>"
+# Check if four arguments are provided
+if [ "$#" -lt 3 ] || [ "$#" -gt 4 ]; then
+    echo "Usage: $0 <ssh_server> <remote_directory> <local_directory> [suffix]"
     exit 1
 fi
 
@@ -10,6 +10,7 @@ fi
 SSH_SERVER="$1"
 REMOTE_DIR="$2"
 LOCAL_DIR="$3"
+SUFFIX="${4:-}"
 
 # Function to perform the SCP operation for specific files in alphabetical order
 function perform_scp {
@@ -22,7 +23,13 @@ function perform_scp {
 
     # Loop through each sorted remote file and copy if it doesn't exist locally
     for remote_file in "${sorted_files[@]}"; do
-        local_file="${LOCAL_DIR}/$(basename "${remote_file}")"
+        base_name=$(basename "${remote_file}")
+        if [ -n "${SUFFIX}" ]; then
+            # local_file="${LOCAL_DIR}/${base_name%.*}${SUFFIX}.${base_name##*.}"
+		    local_file="${LOCAL_DIR}/${base_name}.${SUFFIX}"
+        else
+            local_file="${LOCAL_DIR}/${base_name}"
+        fi
 
         if [ ! -f "${local_file}" ]; then
             # File does not exist locally, copy it
