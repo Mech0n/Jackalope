@@ -2,3 +2,5 @@ build
 build2
 TinyInst
 build_*
+
+.DS_Store
