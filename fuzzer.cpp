@@ -175,6 +175,8 @@ void Fuzzer::Run(int argc, char **argv) {
 
   ParseOptions(argc, argv);
 
+  srand(time(NULL));
+
   SetupDirectories();
 
   if(should_restore_state) {
@@ -661,7 +663,7 @@ void Fuzzer::SynchronizeAndGetJob(ThreadContext* tc, FuzzerJob* job) {
       }
     }
   }
-  else {
+  else if (rand() % 100 <= 10) {
     sync_fuzzers(tc);
   }
   
@@ -773,7 +775,7 @@ void Fuzzer::FuzzJob(ThreadContext* tc, FuzzerJob* job) {
   entry->sample->EnsureLoaded();
 
   while (1) {
-    printf("Still Fuzzing sample %s\n", entry->sample_filename.c_str());
+    // printf("Still Fuzzing sample %s\n", entry->sample_filename.c_str());
     Sample mutated_sample = *entry->sample;
     if (!tc->mutator->Mutate(&mutated_sample, tc->prng, tc->all_samples_local)) break;
     if (mutated_sample.size > Sample::max_size) {

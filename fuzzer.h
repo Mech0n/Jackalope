@@ -29,6 +29,8 @@ limitations under the License.
 #include "range.h"
 #include "rangetracker.h"
 
+#include <time.h>
+
 #ifdef linux
 #include "sancovinstrumentation.h"
 #endif
