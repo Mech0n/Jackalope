@@ -172,6 +172,7 @@ void Fuzzer::Run(int argc, char **argv) {
   num_samples = 0;
   num_samples_discarded = 0;
   total_execs = 0;
+  fuzzers_sync_offset = 0;
 
   ParseOptions(argc, argv);
 
@@ -886,6 +887,7 @@ void Fuzzer::SaveState(ThreadContext *tc) {
   fwrite(&num_samples, sizeof(num_samples), 1, fp);
   fwrite(&num_samples_discarded, sizeof(num_samples_discarded), 1, fp);
   fwrite(&total_execs, sizeof(total_execs), 1, fp);
+  fwrite(&fuzzers_sync_offset, sizeof(fuzzers_sync_offset), 1, fp);
 
   WriteCoverageBinary(fuzzer_coverage, fp);
   
@@ -926,6 +928,7 @@ void Fuzzer::RestoreState(ThreadContext *tc) {
   fread(&num_samples, sizeof(num_samples), 1, fp);
   fread(&num_samples_discarded, sizeof(num_samples_discarded), 1, fp);
   fread(&total_execs, sizeof(total_execs), 1, fp);
+  fread(&fuzzers_sync_offset, sizeof(fuzzers_sync_offset), 1, fp);
  
   ReadCoverageBinary(fuzzer_coverage, fp);
   
